@@ -75,9 +75,30 @@ module Chronic
 		end
 		
 		def date_string(text, specified_options = {})
-		  non_date_string = strip_tokens(text, specified_options).split
-		  date_string = text.split.map { |token| token if not non_date_string.include?(token) }
-		  return date_string.join(' ').strip
+      # date_tokens = tokenize(text).map { |token| token if token.tagged? }
+      # return date_string.join(' ').strip
+      tokens = tokenize(text, specified_options)
+      date_str = ''
+      pos = 0
+      tokens.each do |token|
+        # token position in the text
+        if not text.index(token.word, pos)
+          raise "Could not find token <#{token.word}>"
+        end
+        token_pos = text.index(token.word, pos) + token.word.length - 1
+        if token.tagged?
+          # add it
+          # puts "Position: #{pos}; Token Position: #{token_pos}; Word: #{token.word}; Addition: <#{text[pos..token_pos]}>"
+          date_str << text[pos..token_pos]
+          pos = token_pos + 1
+        else
+          pos = token_pos + 1
+          if text[pos,1] == ' ':
+            pos += 1
+          end
+        end
+      end
+      return date_str
 	  end
 
 		# Returns an array with text tokenized by the respective classes
@@ -105,7 +126,20 @@ module Chronic
 			[Grabber, Pointer, Scalar, Ordinal, Separator, TimeZone].each do |tokenizer|
 				@tokens = tokenizer.scan(@tokens)
 			end
-
+      
+      # remove trailing separator tokens
+      @tokens.length.times do |ix|
+        # if this is a separator token, there needs to be another tagged token next
+        if @tokens[ix].get_tag(Chronic::Separator)
+          next_token = ix + 1
+          next_token_exists_and_is_not_tagged = (@tokens[next_token] and not @tokens[next_token].tagged?)
+          next_token_does_not_exist = (not @tokens[next_token])
+          if (next_token_does_not_exist) or (next_token_exists_and_is_not_tagged)
+            @tokens[ix].tags = []
+          end
+        end
+      end
+      
 			return @tokens
 		end
 

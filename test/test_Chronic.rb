@@ -51,5 +51,25 @@ class TestChronic < Test::Unit::TestCase
 	  assert_equal("9pm", Chronic.date_string("9pm"))
 	  assert_equal("9/27/2009", Chronic.date_string("9/27/2009"))
 	  assert_equal("9/27/2009", Chronic.date_string("Meeting 9/27/2009"))
+	  assert_equal("today", Chronic.date_string("Meeting today"))
+	end
+	
+	def test_tokenize_ignores_trailing_tokens
+	  # tokenize will keep tokens like "at" in the string "Meeting 9/27/2009 at the bar" even though it is
+	  # not part of the date
+	  tokens = Chronic.tokenize("9/27/2009 at")
+	  assert_nil(tokens[-1].get_tag(Chronic::Separator), "The last token in this string should not be tagged")
+	  assert_equal("9/27/2009", Chronic.date_string("9/27/2009 at"))
+	  
+	  # test a string with two of the same separator -- one of which will be tagged, one will not
+	  separator_test = "Meeting 9/27/2009 at 7pm at the bar"
+	  tokens = Chronic.tokenize(separator_test)
+	  assert_not_nil(tokens[6].get_tag(Chronic::Separator))
+	  assert_nil(tokens[9].get_tag(Chronic::Separator))
+	  assert_equal("Meeting at the bar", Chronic.strip_tokens(separator_test))
+	  assert_equal("9/27/2009 at 7pm", Chronic.date_string(separator_test), "date_string does not return the correct date string for <#{separator_test}>")
+	  
+	  # because the trailing "at" separator here is not tagged anymore, it will be part of the strip_tokens string
+	  assert_equal("Meeting at the bar", Chronic.strip_tokens("Meeting 9/27/2009 at the bar"))
 	end
 end
