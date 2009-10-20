@@ -795,6 +795,14 @@ class TestParsing < Test::Unit::TestCase
 	  assert_nil(Chronic.parse("Fry"))
 	  assert_not_nil(Chronic.parse("Friday"))
 	end
+	
+	def test_date_with_commas
+	  t = parse_now("Today, 9pm")
+	  assert_equal(Time.local(2006, 8, 16, 21), t)
+	  
+	  t = parse_now("Meeting, Today, 9pm")
+	  assert_equal(Time.local(2006, 8, 16, 21), t)
+  end
 
 	private
 	def parse_now(string, options={})
