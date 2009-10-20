@@ -1,3 +1,10 @@
+= latest
+
+* fixed a bug where "Fry" was being parsed as "Fri"
+* added date_string which gives back the date portion of the string passed to Chronic
+* fixed a "bug" where trailing separator tokens were kept as part of date when they didn't need to be (see the tests TestChronic#test_tokenize_ignores_trailing_tokens)
+* Updated some of the tests
+
 = 0.2.4
 
 * fixed numerizer number combination bug (27 Oct 2006 7:30pm works now) (reported by reynard h)
