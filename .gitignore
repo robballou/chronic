@@ -3,3 +3,4 @@ coverage
 pkg
 lib/test.rb
 TAGS
+*.gem
