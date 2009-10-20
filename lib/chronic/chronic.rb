@@ -75,30 +75,9 @@ module Chronic
 		end
 		
 		def date_string(text, specified_options = {})
-      # date_tokens = tokenize(text).map { |token| token if token.tagged? }
-      # return date_string.join(' ').strip
-      tokens = tokenize(text, specified_options)
-      date_str = ''
-      pos = 0
-      tokens.each do |token|
-        # token position in the text
-        if not text.index(token.word, pos)
-          raise "Could not find token <#{token.word}>"
-        end
-        token_pos = text.index(token.word, pos) + token.word.length - 1
-        if token.tagged?
-          # add it
-          # puts "Position: #{pos}; Token Position: #{token_pos}; Word: #{token.word}; Addition: <#{text[pos..token_pos]}>"
-          date_str << text[pos..token_pos]
-          pos = token_pos + 1
-        else
-          pos = token_pos + 1
-          if text[pos,1] == ' ':
-            pos += 1
-          end
-        end
-      end
-      return date_str
+      # text = pre_normalize(text)
+      date_tokens = tokenize(text).map { |token| token.word if token.tagged? }
+      return date_tokens.join(' ').strip
 	  end
 
 		# Returns an array with text tokenized by the respective classes
