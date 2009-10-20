@@ -73,6 +73,12 @@ module Chronic
 			# strip any tagged tokens
 			return tokenize(text, specified_options).select { |token| !token.tagged? }.map { |token| token.word }.join(' ')
 		end
+		
+		def date_string(text, specified_options = {})
+		  non_date_string = strip_tokens(text, specified_options).split
+		  date_string = text.split.map { |token| token if not non_date_string.include?(token) }
+		  return date_string.join(' ').strip
+	  end
 
 		# Returns an array with text tokenized by the respective classes
 		def tokenize(text, specified_options = {})

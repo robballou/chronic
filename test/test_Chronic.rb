@@ -46,5 +46,10 @@ class TestChronic < Test::Unit::TestCase
 		span = Chronic::Span.new(Time.local(2006, 11), Time.local(2006, 12))
 		assert_equal Time.local(2006, 11, 16), Chronic.guess(span)
 	end
-
+	
+	def test_date_string
+	  assert_equal("9pm", Chronic.date_string("9pm"))
+	  assert_equal("9/27/2009", Chronic.date_string("9/27/2009"))
+	  assert_equal("9/27/2009", Chronic.date_string("Meeting 9/27/2009"))
+	end
 end
