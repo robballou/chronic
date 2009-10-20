@@ -52,7 +52,7 @@ class Chronic::Repeater < Chronic::Tag #:nodoc:
 			/^wed$/i => :wednesday,
 			/^th(urs|ers)day$/i => :thursday,
 			/^thu$/i => :thursday,
-			/^fr[iy](day)?$/i => :friday,
+			/^fr[i](day)?$/i => :friday,
 			/^sat(t?[ue]rday)?$/i => :saturday,
 			/^su[nm](day)?$/i => :sunday}
 		scanner.keys.each do |scanner_item|

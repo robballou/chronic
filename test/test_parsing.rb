@@ -793,6 +793,7 @@ class TestParsing < Test::Unit::TestCase
 	def test_fry_parsed_as_fri
 	  # the word "fry" was parsed as "fri"
 	  assert_nil(Chronic.parse("Fry"))
+	  assert_not_nil(Chronic.parse("Friday"))
 	end
 
 	private
