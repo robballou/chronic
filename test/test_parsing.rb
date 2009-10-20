@@ -789,6 +789,11 @@ class TestParsing < Test::Unit::TestCase
 		t = parse_now("in 3.5 hours")
 		assert_equal Time.local(2006, 8,16,17, 30), t
 	end
+	
+	def test_fry_parsed_as_fri
+	  # the word "fry" was parsed as "fri"
+	  assert_nil(Chronic.parse("Fry"))
+	end
 
 	private
 	def parse_now(string, options={})
